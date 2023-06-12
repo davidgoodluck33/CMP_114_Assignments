@@ -1,0 +1,156 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# User login
+def login():
+    username = username_entry.get()
+    password = password_entry.get()
+    # You can add your own logic here to validate the username and password
+    # For simplicity, let's assume a fixed username and password
+    if username == "admin" and password == "password":
+        open_main_menu()
+    else:
+        messagebox.showerror("Error", "Invalid username or password")
+
+# Account class
+class Account:
+    def __init__(self, balance=0):
+        self.balance = balance
+
+    def deposit(self, amount):
+        self.balance += amount
+        messagebox.showinfo("Deposit", f"Deposited {amount}. Current balance: {self.balance}")
+
+    def withdraw(self, amount):
+        if self.balance >= amount:
+            self.balance -= amount
+            messagebox.showinfo("Withdrawal", f"Withdrawn {amount}. Current balance: {self.balance}")
+        else:
+            messagebox.showerror("Error", "Insufficient balance!")
+
+    def display_balance(self):
+        messagebox.showinfo("Account Balance", f"Account balance: {self.balance}")
+
+
+# Main bank app GUI
+def open_main_menu():
+    login_window.destroy()
+    main_menu_window = tk.Tk()
+    main_menu_window.title("Bank App")
+    main_menu_window.configure(bg="yellow")
+
+    # Create account object
+    account = Account()
+
+    def open_savings_account():
+        main_menu_window.withdraw()
+        savings_account_window = tk.Tk()
+        savings_account_window.title("Savings Account")
+        savings_account_window.configure(bg="yellow")
+
+        def deposit():
+            amount = float(savings_amount_entry.get())
+            account.deposit(amount)
+            savings_amount_entry.delete(0, tk.END)
+
+        def withdraw():
+            amount = float(savings_amount_entry.get())
+            account.withdraw(amount)
+            savings_amount_entry.delete(0, tk.END)
+
+        def display_balance():
+            account.display_balance()
+
+        savings_amount_label = tk.Label(savings_account_window, text="Amount:")
+        savings_amount_label.pack()
+
+        savings_amount_entry = tk.Entry(savings_account_window)
+        savings_amount_entry.pack()
+
+        deposit_button = tk.Button(savings_account_window, text="Deposit", command=deposit)
+        deposit_button.pack()
+
+        withdraw_button = tk.Button(savings_account_window, text="Withdraw", command=withdraw)
+        withdraw_button.pack()
+
+        display_balance_button = tk.Button(savings_account_window, text="Display Balance", command=display_balance)
+        display_balance_button.pack()
+
+        back_button = tk.Button(savings_account_window, text="Back", command=lambda: back(savings_account_window))
+        back_button.pack()
+
+        savings_account_window.mainloop()
+
+    def open_current_account():
+        main_menu_window.withdraw()
+        current_account_window = tk.Tk()
+        current_account_window.title("Current Account")
+        current_account_window.configure(bg="yellow")
+
+        def deposit():
+            amount = float(current_amount_entry.get())
+            account.deposit(amount)
+            current_amount_entry.delete(0, tk.END)
+
+        def withdraw():
+            amount = float(current_amount_entry.get())
+            account.withdraw(amount)
+            current_amount_entry.delete(0, tk.END)
+
+        def display_balance():
+            account.display_balance()
+
+        current_amount_label = tk.Label(current_account_window, text="Amount:")
+        current_amount_label.pack()
+
+        current_amount_entry = tk.Entry(current_account_window)
+        current_amount_entry.pack()
+
+        deposit_button = tk.Button(current_account_window, text="Deposit", command=deposit)
+        deposit_button.pack()
+
+        withdraw_button = tk.Button(current_account_window, text="Withdraw", command=withdraw)
+        withdraw_button.pack()
+
+        display_balance_button = tk.Button(current_account_window, text="Display Balance", command=display_balance)
+        display_balance_button.pack()
+
+        back_button = tk.Button(current_account_window, text="Back", command=lambda: back(current_account_window))
+        back_button.pack()
+
+        current_account_window.mainloop()
+
+    def back(window):
+        window.destroy()
+        main_menu_window.deiconify()
+
+    savings_account_button = tk.Button(main_menu_window, text="Savings Account", command=open_savings_account)
+    savings_account_button.pack()
+
+    current_account_button = tk.Button(main_menu_window, text="Current Account", command=open_current_account)
+    current_account_button.pack()
+
+    main_menu_window.mainloop()
+
+
+# Login GUI
+login_window = tk.Tk()
+login_window.title("Bank App Login")
+login_window.configure(bg="yellow")
+
+username_label = tk.Label(login_window, text="Username:")
+username_label.pack()
+
+username_entry = tk.Entry(login_window)
+username_entry.pack()
+
+password_label = tk.Label(login_window, text="Password:")
+password_label.pack()
+
+password_entry = tk.Entry(login_window, show="*")
+password_entry.pack()
+
+login_button = tk.Button(login_window, text="Login", command=login)
+login_button.pack()
+
+login_window.mainloop()
